@@ -1,0 +1,16 @@
+[
+  (define)
+  (function_body)
+  (global_global)
+  (alias)
+  (ifunc)
+  (declare)
+  (struct_type)
+  (packed_struct_type)
+  (metadata_tuple)
+  (global_metadata)
+  (metadata)
+  (unnamed_attr_grp)
+  (argument_list)
+  (comment)
+] @fold
