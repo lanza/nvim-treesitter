@@ -20,6 +20,12 @@
   "inner_dims_pos"
   "shared_outs"
   "default"
+  "cond"
+  "body"
+  "catch"
+  "cleanup"
+  "true"
+  "false"
   (arith_cmp_predicate)
 ] @keyword
 
@@ -258,6 +264,41 @@
   "linalg.index"
   "linalg.map"
   "linalg.yield"
+
+  "cir.func"
+  "cir.call"
+  "cir.return"
+  "cir.alloca"
+  "cir.load"
+  "cir.store"
+  "cir.const"
+  "cir.cast"
+  "cir.binop"
+  "cir.cmp"
+  "cir.unary"
+  "cir.br"
+  "cir.brcond"
+  "cir.yield"
+  "cir.if"
+  "cir.scope"
+  "cir.loop"
+  "cir.global"
+  "cir.get_global"
+  "cir.ptr_stride"
+  "cir.try"
+  "cir.throw"
+  "cir.struct_element_addr"
+  "cir.get_member"
+  "cir.switch"
+  "cir.ternary"
+  "cir.select"
+  "cir.copy"
+  "cir.break"
+  "cir.continue"
+  "cir.unreachable"
+  "cir.trap"
+  "cir.objsize"
+  "cir.shift"
 ] @function.builtin
 
 (generic_operation) @function
@@ -333,6 +374,9 @@
   name: (symbol_ref_id) @function)
 
 (llvm_dialect
+  name: (symbol_ref_id) @function)
+
+(cir_dialect
   name: (symbol_ref_id) @function)
 
 (func_arg_list
