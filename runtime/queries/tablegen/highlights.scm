@@ -1,48 +1,70 @@
-; Preprocs
-(preprocessor_directive) @keyword.directive
-
-; Includes
-"include" @keyword.import
-
-; Keywords
+; Comments
 [
-  "assert"
-  "field"
-  "let"
-  "def"
-  "defm"
-  "defset"
-  "defvar"
-] @keyword
+  (comment)
+  (multiline_comment)
+] @comment
+
+; Brackets and delimiters
+[
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
 
 [
-  "multiclass"
-  "class"
-] @keyword.type
+  "<"
+  ">"
+] @punctuation.bracket.angle
 
-"in" @keyword.operator
-
-; Conditionals
 [
-  "if"
-  "else"
-  "then"
-] @keyword.conditional
+  ","
+  ";"
+  "."
+] @punctuation.delimiter
 
-; Repeats
-"foreach" @keyword.repeat
+; Operators
+[
+  "#"
+  "-"
+  "..."
+  ":"
+] @operator
 
-; Variables
-(identifier) @variable
+"=" @operator.assignment
 
-(var) @variable.builtin
+; Built-in functions and operators
+"!cond" @function.builtin
 
-; Parameters
+(operator_keyword) @function.builtin
+
+; Boolean constants
+[
+  "true"
+  "false"
+] @constant.builtin.boolean
+
+; Special constant (uninitialized value)
+"?" @constant.builtin
+
+; Variables and parameters
+(var) @variable
+
 (template_arg
   (identifier) @variable.parameter)
 
+(_ argument: (value (identifier) @variable.parameter))
+
+; DAG named arguments
+(dag_arg
+  (var) @variable.parameter)
+
 ; Types
 (type) @type
+
+"code" @type.builtin
 
 [
   "bit"
@@ -51,109 +73,98 @@
   "dag"
   "bits"
   "list"
-  "code"
 ] @type.builtin
 
-(class
-  name: (identifier) @type)
+; Numbers and strings
+(number) @constant.numeric.integer
 
-(multiclass
-  name: (identifier) @type)
+(string_string) @string
+
+(code_string) @string.special
+
+; Preprocessor directives
+(preprocessor) @keyword.directive
+
+; Keywords - Definition keywords
+[
+  "class"
+  "def"
+  "defvar"
+  "defset"
+  "deftype"
+  "assert"
+  "dump"
+] @keyword
+
+; Deprecated keyword
+"field" @keyword.deprecated
+
+; Keywords - Control flow
+[
+  "let"
+  "in"
+  "foreach"
+  "if"
+  "then"
+  "else"
+] @keyword.control
+
+; Keywords - Import
+"include" @keyword.control.import
+
+; Keywords - Multiclass (namespace-like)
+[
+  "multiclass"
+  "defm"
+] @keyword.namespace
+
+; Identifiers in different contexts
+(class
+  name: (identifier) @type.definition)
 
 (def
-  name: (value
-    (_) @type))
+  (value
+    (identifier) @variable.definition) .)
 
-(defm
-  name: (value
-    (_) @type))
+(multiclass
+  (identifier) @namespace.definition)
+
+(defvar
+  (identifier) @variable.definition)
 
 (defset
-  name: (identifier) @type)
+  (identifier) @variable.definition)
 
+(deftype
+  (identifier) @type.definition)
+
+(let_item
+  (identifier) @variable.definition)
+
+(let_inst
+  (identifier) @variable.definition)
+
+(def_var
+  (identifier) @variable.definition)
+
+(foreach
+  (identifier) @variable.definition)
+
+(instruction
+  (identifier) @property)
+
+; Parent class references
 (parent_class_list
-  (identifier) @type
-  (value
-    (_) @type)?)
-
-(anonymous_record
   (identifier) @type)
 
-(anonymous_record
-  (value
-    (_) @type))
+; Field access
+(value_suffix
+  "." @punctuation.delimiter
+  (identifier) @property)
 
-((identifier) @type
-  (#lua-match? @type "^_*[A-Z][A-Z0-9_]+$"))
+; Include files
+(include
+  (string_string) @string.special.path)
 
-; Fields
-(instruction
-  (identifier) @variable.member)
-
-(let_instruction
-  (identifier) @variable.member)
-
-; Functions
-([
-  (bang_operator)
-  (cond_operator)
-] @function
-  (#set! priority 105))
-
-; Operators
-[
-  "="
-  "#"
-  "-"
-  ":"
-  "..."
-] @operator
-
-; Literals
-(string) @string
-
-(code) @string.special
-
-(integer) @number
-
-(boolean) @boolean
-
-(uninitialized_value) @constant.builtin
-
-; Punctuation
-[
-  "{"
-  "}"
-] @punctuation.bracket
-
-[
-  "["
-  "]"
-] @punctuation.bracket
-
-[
-  "("
-  ")"
-] @punctuation.bracket
-
-[
-  "<"
-  ">"
-] @punctuation.bracket
-
-[
-  "."
-  ","
-  ";"
-] @punctuation.delimiter
-
-"!" @punctuation.special
-
-; Comments
-[
-  (comment)
-  (multiline_comment)
-] @comment @spell
-
-((comment) @keyword.directive @nospell
-  (#lua-match? @keyword.directive "^.*RUN"))
+; Error nodes
+(ERROR) @error
