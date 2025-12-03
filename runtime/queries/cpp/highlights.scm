@@ -271,3 +271,23 @@
   ] @punctuation.bracket)
 
 (literal_suffix) @operator
+
+;; Foo(...) call_expressions
+((call_expression
+  function: (identifier) @constructor)
+  (#set! priority 126)
+  (#lua-match? @constructor "^%u"))
+
+(module_name
+  (identifier) @module)
+
+(namespace_identifier) @namespace
+
+[
+ "export"
+ "import"
+] @keyword
+
+[
+ "module"
+] @keyword.type
