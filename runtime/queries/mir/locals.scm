@@ -1,19 +1,31 @@
 ; Locals for LLVM Machine IR (MIR)
 
-; Function definitions create a new scope
+; Scopes
 (function_definition) @local.scope
-
-; Basic blocks create a new scope
 (basic_block) @local.scope
 
-; Register definitions
+; Function name definitions
+(name_property
+  name: (bare_identifier) @local.definition.function)
+
+; Register definitions (in def_list before =)
 (def_list
   (operand
     (operand_value
-      (register) @local.definition)))
+      (register) @local.definition.var)))
 
 ; Virtual register definitions
 (def_list
   (operand
     (operand_value
-      (virtual_register) @local.definition)))
+      (virtual_register) @local.definition.var)))
+
+; Block label definitions
+(basic_block
+  (block_label) @local.definition)
+
+; References
+(register) @local.reference
+(virtual_register) @local.reference
+(block_ref) @local.reference
+(global_ref) @local.reference
